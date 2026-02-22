@@ -59,7 +59,7 @@ st.markdown("""
 
 @st.cache_data
 def load_data():
-    file_path = 'PLOTTING KELOMPOK_GATHERING ITDS 25_PENS - PLOTTING.csv'
+    file_path = 'DATA_PLOTTING KELOMPOK_GATHERING ITDS 25_PENS - PLOTTING.csv'
     try:
         # Menyesuaikan pembacaan file berdasarkan struktur CSV Anda
         df = pd.read_csv(file_path, skiprows=3)
