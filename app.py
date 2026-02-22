@@ -1,14 +1,11 @@
 import streamlit as st
 import pandas as pd
 
-# 1. Konfigurasi Halaman
 st.set_page_config(
-    page_title="Data Plotting ITDS 25",
+    page_title="KLIK 25 - PLOTTING KELOMPOK",
     layout="centered"
 )
 
-# --- BAGIAN BACKGROUND (EDIT DI SINI) ---
-# Ganti URL di bawah dengan link gambar background Anda atau path file lokal
 background_image_url = "https://your-image-url-here.com/background.jpg" 
 
 # 2. Custom CSS
@@ -23,8 +20,6 @@ st.markdown(f"""
         font-family: 'Inter', sans-serif;
     }}
 
-    /* Overlay agar konten tetap mudah dibaca di atas background */
-    /* Kita buat container utama sedikit transparan putih agar background terlihat tipis di belakang */
     .block-container {{
         background-color: rgba(255, 255, 255, 0.9); /* Angka 0.9 adalah tingkat kepekatan putih */
         padding: 40px !important;
@@ -34,15 +29,12 @@ st.markdown(f"""
         box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     }}
 
-    /* Hilangkan Header Streamlit */
     header {{visibility: hidden;}}
 
-    /* Full Black Text */
     h1, h2, h3, h4, p, span, div, label {{
         color: #000000 !important;
     }}
 
-    /* Input Box Minimalis */
     .stTextInput > div > div > input {{
         border-radius: 6px;
         border: 1px solid #000000;
@@ -58,7 +50,7 @@ st.markdown(f"""
         padding: 15px;
         border-radius: 8px;
         margin-bottom: 10px;
-        background-color: #FFFFFF; /* Tetap putih solid agar teks tidak tabrakan dengan bg */
+        background-color: #FFFFFF; 
     }}
 
     .label-text {{
@@ -107,18 +99,16 @@ def load_data():
     except:
         return None
 
-# --- HEADER SECTION ---
 col_logo, col_text = st.columns([1, 4])
 with col_logo:
     st.markdown("""<div style="border: 2px solid #000000; width: 75px; height: 75px; display: flex; align-items: center; justify-content: center; color: #000000; font-weight: 900; font-size: 12px; text-align: center; background: #BAE6FD; border-radius: 8px;">LOGO<br>ITDS</div>""", unsafe_allow_html=True)
 
 with col_text:
     st.markdown("<h1 style='margin:0; font-weight: 700; font-size: 28px;'>GATHERING ITDS 2025</h1>", unsafe_allow_html=True)
-    st.markdown("<p style='margin:0; font-size: 16px; opacity: 0.8;'>Portal Cek Plotting Kelompok & Anggota</p>", unsafe_allow_html=True)
+    st.markdown("<p style='margin:0; font-size: 16px; opacity: 0.8;'>Portal Cek Plotting Kelompok & Anggota Gathering Klik 25</p>", unsafe_allow_html=True)
 
 st.write("")
 
-# --- DATA LOADING ---
 df = load_data()
 
 if df is not None:
@@ -136,7 +126,6 @@ if df is not None:
             else:
                 st.error("Data tidak ditemukan. Pastikan ejaan nama benar.")
 
-    # --- TAMPILAN AWAL ---
     if not search_query:
         st.markdown(f"""
             <div class="welcome-container">
@@ -148,12 +137,11 @@ if df is not None:
             </div>
         """, unsafe_allow_html=True)
 
-    # --- RESULT SECTION ---
     if selected_group:
         group_df = df[df['Kelompok'] == selected_group]
         
         if not group_df.empty:
-            st.markdown(f"<h2 style='margin-top: 20px;'>Kelompok {selected_group}</h2>", unsafe_allow_html=True)
+            st.markdown(f"<h2 style='margin-top: 20px;'>Kartu Kelompok {selected_group}</h2>", unsafe_allow_html=True)
             
             pjs = ", ".join(group_df['PJ TIM ACARA'].unique())
             st.markdown(f"""
@@ -173,7 +161,7 @@ if df is not None:
             with c2:
                 st.markdown(f'<div class="info-box"><div class="label-text">Perempuan</div><div class="value-text">{p_count}</div></div>', unsafe_allow_html=True)
             with c3:
-                st.markdown(f'<div class="info-box"><div class="label-text">Dom. Kelas</div><div class="value-text">{dom_class}</div></div>', unsafe_allow_html=True)
+                st.markdown(f'<div class="info-box"><div class="label-text">Dominasi Kelas</div><div class="value-text">{dom_class}</div></div>', unsafe_allow_html=True)
 
             st.markdown("<h4 style='margin-top: 20px; margin-bottom: 10px;'>Daftar Seluruh Kelompok</h4>", unsafe_allow_html=True)
             st.dataframe(
@@ -185,4 +173,4 @@ if df is not None:
 else:
     st.error("File database tidak ditemukan.")
 
-st.markdown("<div style='text-align: center; color: #94A3B8 !important; font-size: 11px; margin-top: 80px;'>DATABASE PLOTTING • DIVISI ACARA ITDS 2025</div>", unsafe_allow_html=True)
+st.markdown("<div style='text-align: center; color: #94A3B8 !important; font-size: 11px; margin-top: 80px;'>KLIK 25 • PANITIA GATHERING ITDS 2025</div>", unsafe_allow_html=True)
