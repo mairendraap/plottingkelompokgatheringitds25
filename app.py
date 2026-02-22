@@ -1,63 +1,59 @@
 import streamlit as st
 import pandas as pd
 
-# 1. Konfigurasi Halaman & Tema
+# 1. Konfigurasi Halaman
 st.set_page_config(
-    page_title="Gathering ITDS 2025",
-    page_icon="⚡",
-    layout="centered" # Menggunakan centered agar UI lebih fokus dan tidak 'lebar' seperti dashboard kaku
+    page_title="Gathering ITDS 25",
+    page_icon="💙",
+    layout="centered"
 )
 
-# 2. Custom CSS untuk UI Simpel & Modern
+# 2. Custom CSS (Fokus pada White Space & Warna Biru Pastel)
 st.markdown("""
     <style>
-    /* Mengubah font global */
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
-    
+    /* Import Font Modern */
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap');
+
     html, body, [class*="css"] {
-        font-family: 'Inter', sans-serif;
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        background-color: #FFFFFF;
+    }
+
+    /* Hilangkan Header Streamlit */
+    header {visibility: hidden;}
+
+    /* Input Box Styling */
+    .stTextInput > div > div > input {
+        border-radius: 12px;
+        border: 1px solid #E2E8F0;
+        padding: 10px 15px;
         background-color: #F8FAFC;
     }
 
-    /* Menghilangkan header default streamlit untuk kebersihan */
-    header {visibility: hidden;}
-    
-    /* Style Kartu Nama Kelompok */
-    .group-header {
-        background-color: #E0F2FE;
-        color: #0369A1;
-        padding: 1.5rem;
-        border-radius: 15px;
-        text-align: center;
-        margin-bottom: 2rem;
-        border: 1px solid #BAE6FD;
+    /* Card Styling */
+    .info-card {
+        background: #FFFFFF;
+        padding: 20px;
+        border-radius: 20px;
+        border: 1px solid #F1F5F9;
+        box-shadow: 0 10px 25px rgba(0, 104, 255, 0.05);
+        margin-bottom: 20px;
     }
 
-    /* Style Metric/Statistik */
-    [data-testid="stMetricValue"] {
-        font-size: 1.8rem;
-        color: #0284C7;
-    }
-    
-    .stMetric {
-        background: white;
-        padding: 15px;
-        border-radius: 12px;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    .status-badge {
+        display: inline-block;
+        padding: 5px 12px;
+        border-radius: 10px;
+        font-size: 12px;
+        font-weight: 600;
+        margin-bottom: 10px;
     }
 
-    /* Tombol & Input */
-    .stButton>button {
-        border-radius: 8px;
-        background-color: #0284C7;
-        color: white;
-    }
-
-    /* Footer simpel */
+    /* Footer */
     .footer {
         text-align: center;
-        color: #94A3B8;
-        margin-top: 5rem;
+        color: #CBD5E1;
+        margin-top: 40px;
         font-size: 0.8rem;
     }
     </style>
@@ -65,7 +61,6 @@ st.markdown("""
 
 @st.cache_data
 def load_data():
-    # Sesuaikan nama file jika berbeda
     file_path = 'DATA_PLOTTING KELOMPOK_GATHERING ITDS 25_PENS - PLOTTING.csv'
     try:
         df = pd.read_csv(file_path, skiprows=3)
@@ -76,82 +71,87 @@ def load_data():
     except:
         return None
 
-# --- BAGIAN HEADER & LOGO ---
+# --- UI HEADER ---
 # Space untuk Logo Angkatan
-col_logo, col_title = st.columns([1, 4])
-with col_logo:
-    # Ganti 'logo.png' dengan path file logo Anda nanti
-    # st.image("logo_angkatan.png", width=100) 
-    st.markdown("""<div style="background: #E2E8F0; width: 80px; height: 80px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #64748B; font-size: 10px; text-align: center;">LOGO<br>DI SINI</div>""", unsafe_allow_html=True)
+col_a, col_b = st.columns([1, 5])
+with col_a:
+    # Jika file logo ada, pakai: st.image("logo.png")
+    st.markdown("""<div style="width: 70px; height: 70px; background: #0068FF; border-radius: 18px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 10px; text-align: center;">LOGO<br>ITDS</div>""", unsafe_allow_html=True)
 
-with col_title:
-    st.title("Gathering ITDS 25")
-    st.caption("Sistem Pengecekan Plotting Kelompok & Pendamping")
+with col_b:
+    st.markdown("<h2 style='margin:0; color: #1E293B;'>Gathering ITDS 2025</h2>", unsafe_allow_html=True)
+    st.markdown("<p style='margin:0; color: #64748B;'>Cek Kelompok & PJ Pendamping</p>", unsafe_allow_html=True)
 
-# --- LOGIKA APLIKASI ---
+st.write("")
+
+# --- SEARCH ENGINE ---
 df = load_data()
 
 if df is not None:
-    # Search Bar Simpel di Tengah
-    search_input = st.text_input("", placeholder="🔍 Ketik Nama atau Nomor Kelompok di sini...")
+    search_query = st.text_input("", placeholder="Masukkan Nama atau Nomor Kelompok...")
     
     selected_group = None
 
-    if search_input:
-        if search_input.isdigit():
-            selected_group = int(search_input)
+    if search_query:
+        if search_query.isdigit():
+            selected_group = int(search_query)
         else:
-            match = df[df['NAMA'].str.contains(search_input, case=False, na=False)]
+            match = df[df['NAMA'].str.contains(search_query, case=False, na=False)]
             if not match.empty:
                 selected_group = match.iloc[0]['Kelompok']
             else:
-                st.error("Data tidak ditemukan. Coba masukkan nama yang lebih spesifik.")
+                st.error("Data tidak ditemukan.")
 
     if selected_group:
         group_df = df[df['Kelompok'] == selected_group]
         
         if not group_df.empty:
-            # Info Utama Kelompok
+            # Header Kelompok
             st.markdown(f"""
-                <div class="group-header">
-                    <small style="text-transform: uppercase; letter-spacing: 1px;">Anggota Kelompok</small>
-                    <h1 style="margin:0; color: #0369A1;">KELOMPOK {selected_group}</h1>
+                <div style="margin-top: 20px;">
+                    <span style="background: #E0F2FE; color: #0068FF;" class="status-badge">AKTIF</span>
+                    <h1 style="margin:0; color: #1E293B;">Kelompok {selected_group}</h1>
                 </div>
             """, unsafe_allow_html=True)
 
-            # Baris Statistik (Simpel)
+            # Informasi PJ
             pjs = ", ".join(group_df['PJ TIM ACARA'].unique())
+            st.markdown(f"""
+                <div class="info-card">
+                    <p style="margin:0; color: #64748B; font-size: 13px;">PJ Tim Acara</p>
+                    <p style="margin:0; color: #1E293B; font-weight: 600; font-size: 18px;">{pjs}</p>
+                </div>
+            """, unsafe_allow_html=True)
+
+            # Quick Stats
+            c1, c2, c3 = st.columns(3)
             l_count = len(group_df[group_df['JK'] == 'L'])
             p_count = len(group_df[group_df['JK'] == 'P'])
             dom_class = group_df['KELAS'].mode()[0]
 
-            c1, c2, c3 = st.columns(3)
-            c1.metric("Total", f"{len(group_df)} Org")
-            c2.metric("Laki-Laki", l_count)
-            c3.metric("Perempuan", p_count)
+            with c1:
+                st.markdown(f"<div class='info-card'><small>♂️ Laki-laki</small><br><b>{l_count}</b></div>", unsafe_allow_html=True)
+            with c2:
+                st.markdown(f"<div class='info-card'><small>♀️ Perempuan</small><br><b>{p_count}</b></div>", unsafe_allow_html=True)
+            with c3:
+                st.markdown(f"<div class='info-card'><small>🏫 Dominasi</small><br><b>{dom_class}</b></div>", unsafe_allow_html=True)
 
-            # Box PJ & Dominasi
-            st.markdown(f"""
-                <div style="background: white; padding: 1.2rem; border-radius: 12px; border: 1px solid #E2E8F0; margin-top: 1rem;">
-                    <p style="margin: 0; color: #64748B; font-size: 0.9rem;"><b>PJ Tim Acara:</b> {pjs}</p>
-                    <p style="margin: 0; color: #64748B; font-size: 0.9rem;"><b>Dominasi Kelas:</b> {dom_class}</p>
-                </div>
-            """, unsafe_allow_html=True)
-
-            # Tabel Anggota
-            st.write("---")
+            # Tabel Daftar Anggota
+            st.markdown("<p style='color: #64748B; font-weight: 600; margin-top: 10px;'>Daftar Anggota</p>", unsafe_allow_html=True)
             st.dataframe(
-                group_df[['NRP', 'NAMA', 'JK', 'KELAS']], 
+                group_df[['NRP', 'NAMA', 'KELAS']], 
                 use_container_width=True, 
                 hide_index=True
             )
-        else:
-            st.warning("Nomor kelompok tidak valid.")
     else:
-        # Tampilan Awal (Kosong)
-        st.info("Silakan masukkan nama peserta atau nomor kelompok pada kolom pencarian di atas.")
+        # Default State
+        st.markdown("""
+            <div style="text-align: center; padding: 50px; color: #94A3B8;">
+                <p>Silakan cari nama untuk melihat detail kelompok.</p>
+            </div>
+        """, unsafe_allow_html=True)
 
 else:
-    st.error("File database tidak ditemukan. Pastikan file CSV ada di folder yang sama.")
+    st.error("File tidak ditemukan.")
 
-st.markdown('<div class="footer">Made for ITDS 2025 • PENS</div>', unsafe_allow_html=True)
+st.markdown('<div class="footer">ITDS 2025 • Politeknik Elektronika Negeri Surabaya</div>', unsafe_allow_html=True)
