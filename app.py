@@ -66,7 +66,7 @@ st.markdown("""
 @st.cache_data
 def load_data():
     # Sesuaikan nama file jika berbeda
-    file_path = 'PLOTTING KELOMPOK_GATHERING ITDS 25_PENS - PLOTTING.csv'
+    file_path = 'DATA_PLOTTING KELOMPOK_GATHERING ITDS 25_PENS - PLOTTING.csv'
     try:
         df = pd.read_csv(file_path, skiprows=3)
         df = df.drop(columns=[col for col in df.columns if 'Unnamed' in col])
