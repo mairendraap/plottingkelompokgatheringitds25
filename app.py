@@ -9,6 +9,7 @@ st.set_page_config(
     layout="centered"
 )
 
+# File assets (Pastikan file ini ada di folder yang sama agar tidak error)
 background_image_file = "BGKLIK25.jpg"  
 logo_path = "logoklik.png"             
 
@@ -17,6 +18,7 @@ def get_base64_of_bin_file(bin_file):
         data = f.read()
     return base64.b64encode(data).decode()
 
+# Pengaturan Background
 if os.path.exists(background_image_file):
     bg_base64 = get_base64_of_bin_file(background_image_file)
     bg_css = f"""
@@ -33,104 +35,89 @@ else:
     bg_css = "<style>.stApp { background-color: #FFFFFF; }</style>"
 
 st.markdown(bg_css, unsafe_allow_html=True)
-st.markdown(f"""
+
+# Styling CSS
+st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
     
-    .stApp {{
+    .stApp {
         font-family: 'Inter', sans-serif;
-    }}
+    }
 
-    .block-container {{
+    .block-container {
         background-color: rgba(255, 255, 255, 0.95); 
         padding: 40px !important;
         border-radius: 20px;
         margin-top: 20px;
         margin-bottom: 20px;
         box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    }}
+    }
 
-    header {{visibility: hidden;}}
+    header {visibility: hidden;}
 
-    h1, h2, h3, h4, p, span, div, label, .stMarkdown {{
+    h1, h2, h3, h4, p, span, div, label, .stMarkdown {
         color: #000000 !important;
-    }}
+    }
 
-    .stTextInput > div > div > input {{
+    .stTextInput > div > div > input {
         border-radius: 6px;
         border: 1px solid #000000;
         background-color: #FFFFFF;
         color: #000000 !important;
         padding: 12px;
-    }}
+    }
 
-    .info-box {{
+    .info-box {
         border: 1px solid #E2E8F0;
         border-left: 5px solid #BAE6FD;
         padding: 15px;
         border-radius: 8px;
         margin-bottom: 10px;
         background-color: #FFFFFF; 
-    }}
+    }
 
-    .label-text {{
+    .label-text {
         color: #475569 !important;
         font-size: 11px;
         text-transform: uppercase;
         font-weight: 700;
         letter-spacing: 0.5px;
         margin-bottom: 4px;
-    }}
+    }
 
-    .value-text {{
+    .value-text {
         color: #000000 !important;
         font-size: 16px;
         font-weight: 600;
-    }}
+    }
 
-    .welcome-container {{
+    .welcome-container {
         text-align: center;
         padding: 60px 20px;
         border: 1px dashed #BAE6FD;
         border-radius: 20px;
         background-color: rgba(240, 249, 255, 0.8);
         margin-top: 20px;
-    }}
+    }
 
-    .stDataFrame {{
+    .stDataFrame {
         border: 1px solid #BAE6FD;
         border-radius: 8px;
         background-color: #FFFFFF;
-    }}
+    }
     </style>
     """, unsafe_allow_html=True)
 
 @st.cache_data
 def load_data():
-    # Menggunakan nama file sesuai dengan yang Anda unggah
-    file_path = 'NEW_DATA_PLOTTING KELOMPOK_GATHERING ITDS 25_PENS - PLOTTING.csv'
+    # Menyesuaikan dengan nama file hasil plotting yang sudah dibuat
+    file_path = 'HASIL_PLOT_KELOMPOK_GATHERING.csv'
     try:
-        # File CSV memiliki 3 baris kosong/header tambahan di awal
-        df = pd.read_csv(file_path, skiprows=3)
+        # Load data tanpa skip baris karena file sudah memiliki header
+        df = pd.read_csv(file_path)
         
-        # Mapping kolom 'Column X' ke nama variabel yang digunakan di kode
-        column_mapping = {
-            'Column 1': 'Kelompok',
-            'Column 2': 'NRP',
-            'Column 3': 'NAMA',
-            'Column 4': 'JK',
-            'Column 5': 'KELAS',
-            'Column 6': 'PJ TIM ACARA'
-        }
-        df = df.rename(columns=column_mapping)
-        
-        # Hapus kolom kosong (Unnamed)
-        df = df.drop(columns=[col for col in df.columns if 'Unnamed' in col])
-        
-        # Hapus baris yang kosong pada kolom kunci
-        df = df.dropna(subset=['Kelompok', 'NAMA'])
-        
-        # Pastikan tipe data Kelompok adalah integer
+        # Pastikan kolom 'Kelompok' dalam bentuk integer
         df['Kelompok'] = df['Kelompok'].astype(int)
         
         return df
@@ -138,6 +125,7 @@ def load_data():
         st.error(f"Gagal membaca database: {e}")
         return None
 
+# Header Section
 col_logo, col_text = st.columns([1, 4])
 with col_logo:
     if os.path.exists(logo_path):
@@ -162,7 +150,8 @@ if df is not None:
         if search_query.isdigit():
             selected_group = int(search_query)
         else:
-            match = df[df['NAMA'].str.contains(search_query, case=False, na=False)]
+            # Menggunakan kolom 'Nama' (sesuai CSV)
+            match = df[df['Nama'].str.contains(search_query, case=False, na=False)]
             if not match.empty:
                 selected_group = match.iloc[0]['Kelompok']
             else:
@@ -185,7 +174,8 @@ if df is not None:
         if not group_df.empty:
             st.markdown(f"<h2 style='margin-top: 20px;'>Kartu Kelompok {selected_group}</h2>", unsafe_allow_html=True)
             
-            pjs = ", ".join(group_df['PJ TIM ACARA'].unique())
+            # Kolom 'PJ Tim Acara' sesuai CSV
+            pjs = ", ".join(group_df['PJ Tim Acara'].unique())
             st.markdown(f"""
                 <div class="info-box">
                     <div class="label-text">Pendamping / PJ Tim Acara</div>
@@ -194,9 +184,10 @@ if df is not None:
             """, unsafe_allow_html=True)
 
             c1, c2, c3 = st.columns(3)
-            l_count = len(group_df[group_df['JK'] == 'L'])
-            p_count = len(group_df[group_df['JK'] == 'P'])
-            mode_kelas = group_df['KELAS'].mode()
+            # Kolom 'Jenis Kelamin' dan 'Kelas' sesuai CSV
+            l_count = len(group_df[group_df['Jenis Kelamin'] == 'L'])
+            p_count = len(group_df[group_df['Jenis Kelamin'] == 'P'])
+            mode_kelas = group_df['Kelas'].mode()
             dom_class = mode_kelas[0] if not mode_kelas.empty else "-"
 
             with c1:
@@ -207,8 +198,10 @@ if df is not None:
                 st.markdown(f'<div class="info-box"><div class="label-text">Dominasi Kelas</div><div class="value-text">{dom_class}</div></div>', unsafe_allow_html=True)
 
             st.markdown("<h4 style='margin-top: 20px; margin-bottom: 10px;'>Daftar Anggota Kelompok</h4>", unsafe_allow_html=True)
+            
+            # Menampilkan kolom yang ada di CSV
             st.dataframe(
-                group_df[['NRP', 'NAMA', 'JK', 'KELAS']].reset_index(drop=True), 
+                group_df[['NRP', 'Nama', 'Jenis Kelamin', 'Kelas']].reset_index(drop=True), 
                 use_container_width=True
             )
         else:
