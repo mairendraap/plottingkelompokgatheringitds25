@@ -107,7 +107,7 @@ st.markdown(f"""
 
 @st.cache_data
 def load_data():
-    file_path = 'DATA_PLOTTING KELOMPOK_GATHERING ITDS 25_PENS - PLOTTING.csv'
+    file_path = 'NEW_DATA_PLOTTING KELOMPOK_GATHERING ITDS 25_PENS - PLOTTING.csv'
     try:
         df = pd.read_csv(file_path, skiprows=3)
         df = df.drop(columns=[col for col in df.columns if 'Unnamed' in col])
