@@ -10,7 +10,7 @@ st.set_page_config(
 )
 
 background_image_file = "BGKLIK25.jpg"  
-logo_path = "logoklik.png"            
+logo_path = "logoklik.png"             
 
 def get_base64_of_bin_file(bin_file):
     with open(bin_file, 'rb') as f:
@@ -107,12 +107,32 @@ st.markdown(f"""
 
 @st.cache_data
 def load_data():
-    file_path = 'NEW_DATA_PLOTTING KELOMPOK_GATHERING ITDS 25_PENS - PLOTTING.csv'
+    # Menggunakan nama file sesuai dengan yang Anda unggah
+    file_path = 'DATA_PLOTTING KELOMPOK_GATHERING ITDS 25_PENS - PLOTTING.csv'
     try:
+        # File CSV memiliki 3 baris kosong/header tambahan di awal
         df = pd.read_csv(file_path, skiprows=3)
+        
+        # Mapping kolom 'Column X' ke nama variabel yang digunakan di kode
+        column_mapping = {
+            'Column 1': 'Kelompok',
+            'Column 2': 'NRP',
+            'Column 3': 'NAMA',
+            'Column 4': 'JK',
+            'Column 5': 'KELAS',
+            'Column 6': 'PJ TIM ACARA'
+        }
+        df = df.rename(columns=column_mapping)
+        
+        # Hapus kolom kosong (Unnamed)
         df = df.drop(columns=[col for col in df.columns if 'Unnamed' in col])
+        
+        # Hapus baris yang kosong pada kolom kunci
         df = df.dropna(subset=['Kelompok', 'NAMA'])
+        
+        # Pastikan tipe data Kelompok adalah integer
         df['Kelompok'] = df['Kelompok'].astype(int)
+        
         return df
     except Exception as e:
         st.error(f"Gagal membaca database: {e}")
