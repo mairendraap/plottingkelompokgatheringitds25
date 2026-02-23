@@ -108,7 +108,7 @@ st.markdown(f"""
 @st.cache_data
 def load_data():
     # Menggunakan nama file sesuai dengan yang Anda unggah
-    file_path = 'DATA_PLOTTING KELOMPOK_GATHERING ITDS 25_PENS - PLOTTING.csv'
+    file_path = 'NEW_DATA_PLOTTING KELOMPOK_GATHERING ITDS 25_PENS - PLOTTING.csv'
     try:
         # File CSV memiliki 3 baris kosong/header tambahan di awal
         df = pd.read_csv(file_path, skiprows=3)
