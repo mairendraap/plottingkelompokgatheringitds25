@@ -163,7 +163,7 @@ if df is not None:
                 <h2 style="margin-bottom: 10px;">Selamat Datang! 👋</h2>
                 <p style="font-size: 14px; color: #475569 !important;">
                     Silakan masukkan <b>Nama Lengkap</b> atau <b>Nomor Kelompok</b> <br>
-                    pada kotak pencarian di atas untuk melihat detail plotting Anda.
+                    pada kotak pencarian di atas untuk melihat detail plotting Kamu!.
                 </p>
             </div>
         """, unsafe_allow_html=True)
