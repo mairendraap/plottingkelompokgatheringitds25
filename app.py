@@ -112,7 +112,7 @@ st.markdown("""
 @st.cache_data
 def load_data():
     # Menyesuaikan dengan nama file hasil plotting yang sudah dibuat
-    file_path = 'HASIL_RESHUFFLE_KELOMPOK_GATHERING.csv'
+    file_path = 'HASIL_RESHUFFLE_TERBARU_MIX_KELAS.csv'
     try:
         # Load data tanpa skip baris karena file sudah memiliki header
         df = pd.read_csv(file_path)
